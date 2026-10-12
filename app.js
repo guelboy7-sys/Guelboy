@@ -1,6 +1,6 @@
 // ===== CONFIGURAÇÃO =====
 const API_KEY = 'b4eea7e0c6374d0bb589bb2db30d1adf';
-const API_BASE = 'https://api.football-data.org/v4';
+const API_BASE = 'https://corsproxy.io/?https://api.football-data.org/v4';
 
 const $ = (id) => document.getElementById(id);
 const competition = $('competition');
@@ -25,7 +25,7 @@ dateFrom.value = localISO(earlier);
 dateTo.value = localISO(later);
 
 async function api(url) {
-  const fullUrl = url.startsWith('http') ? url : `${API_BASE}${url}`;
+  const fullUrl = url.startsWith('http') ? url : `${API_BASE}${encodeURIComponent(url)}`;
   const res = await fetch(fullUrl, {
     headers: { 'X-Auth-Token': API_KEY }
   });
