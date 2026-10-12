@@ -1,6 +1,6 @@
 // ===== CONFIGURAÇÃO =====
 const API_KEY = 'b4eea7e0c6374d0bb589bb2db30d1adf';
-const API_BASE = 'https://corsproxy.io/?https://api.football-data.org/v4';
+const API_BASE = 'https://api.football-data.org/v4';
 
 const $ = (id) => document.getElementById(id);
 const competition = $('competition');
@@ -25,12 +25,26 @@ dateFrom.value = localISO(earlier);
 dateTo.value = localISO(later);
 
 async function api(url) {
-  const fullUrl = url.startsWith('http') ? url : `${API_BASE}${encodeURIComponent(url)}`;
-  const res = await fetch(fullUrl, {
-    headers: { 'X-Auth-Token': API_KEY }
-  });
-  if (!res.ok) throw new Error('Erro ao buscar dados. Verifique sua chave API.');
-  return res.json();
+  const fullUrl = url.startsWith('http') ? url : `${API_BASE}${url}`;
+  
+  try {
+    const res = await fetch(fullUrl, {
+      headers: { 'X-Auth-Token': API_KEY },
+      mode: 'cors'
+    });
+    
+    if (!res.ok) {
+      if (res.status === 429) throw new Error('Muitas requisições. Espere 1 minuto e tente de novo.');
+      if (res.status === 403) throw new Error('Chave API inválida ou bloqueada.');
+      throw new Error(`Erro: ${res.status}`);
+    }
+    return res.json();
+  } catch (err) {
+    if (err.message.includes('Failed to fetch') || err.message.includes('CORS')) {
+      throw new Error('Bloqueio de segurança detectado. Teste usando Live Server no VS Code ou navegador diferente.');
+    }
+    throw err;
+  }
 }
 
 function safe(text) {
@@ -100,7 +114,7 @@ function renderReport(matches, standings) {
     m.status === 'FINISHED' && m.score.fullTime?.home !== null
   );
   if (!finished.length) {
-    reportEl.innerHTML = `<div class="report-icon">i</div><div><h3>Dados insuficientes</h3><p>Não há partidas encerradas no período selecionado.</p></div>`;
+    reportEl.innerHTML = `<div class="report-icon">i</div><div><h3>Aguardando dados</h3><p>Não há partidas encerradas no período selecionado.</p></div>`;
     return;
   }
   let goals = 0, homeWins = 0, draws = 0, awayWins = 0;
@@ -123,6 +137,7 @@ function renderReport(matches, standings) {
 }
 
 async function loadCompetitions() {
+  message.textContent = 'Carregando competições...';
   try {
     const data = await api('/competitions');
     competition.innerHTML = '<option value="">Selecione uma competição…</option>';
@@ -135,7 +150,7 @@ async function loadCompetitions() {
     message.textContent = '✅ Selecione uma competição e clique em Atualizar Dados';
     message.className = 'message';
   } catch (e) {
-    message.textContent = '❌ Erro: ' + e.message;
+    message.textContent = '❌ ' + e.message;
     message.className = 'message error';
   }
 }
