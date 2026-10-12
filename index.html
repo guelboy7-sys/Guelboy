@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080e19">
+  <title>Football Intelligence</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">FI</div>
+    <div>
+      <div class="brand">
+        FOOTBALL <span>INTELLIGENCE</span>
+      </div>
+      <div class="subtitle">Painel de dados e desempenho</div>
+    </div>
+    <div class="live-pill">
+      <span></span> DADOS DA API
+    </div>
+  </header>
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">CENTRAL DE ANÁLISE</p>
+      <h1>
+        O jogo explicado<br>
+        <span>pelos dados.</span>
+      </h1>
+      <p class="hero-copy">
+        Acompanhe partidas, placares, classificação e
+        histórico recente em um painel único.
+      </p>
+    </section>
+    <section class="controls panel">
+      <label>
+        Competição
+        <select id="competition">
+          <option value="PL">Premier League</option>
+          <option value="PD">La Liga</option>
+          <option value="SA">Serie A</option>
+          <option value="BL1">Bundesliga</option>
+          <option value="FL1">Ligue 1</option>
+          <option value="CL">Champions League</option>
+        </select>
+      </label>
+      <label>
+        De
+        <input id="dateFrom" type="date">
+      </label>
+      <label>
+        Até
+        <input id="dateTo" type="date">
+      </label>
+      <button id="loadBtn">Atualizar dados</button>
+    </section>
+    <div id="message" class="message" role="status">
+      Preparando painel...
+    </div>
+    <section class="section-head">
+      <div>
+        <p class="eyebrow">AGENDA E RESULTADOS</p>
+        <h2>Partidas</h2>
+      </div>
+      <span class="section-note">
+        Horários exibidos no seu aparelho
+      </span>
+    </section>
+    <section id="matches" class="matches-grid">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </section>
+    <section class="section-head standings-head">
+      <div>
+        <p class="eyebrow">TEMPORADA</p>
+        <h2>Classificação</h2>
+      </div>
+    </section>
+    <section class="panel table-panel">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Time</th>
+              <th>J</th>
+              <th>V</th>
+              <th>E</th>
+              <th>D</th>
+              <th>GP</th>
+              <th>GC</th>
+              <th>SG</th>
+              <th>Pts</th>
+            </tr>
+          </thead>
+          <tbody id="standings">
+            <tr>
+              <td colspan="10" class="empty">
+                Carregando classificação...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="section-head">
+      <div>
+        <p class="eyebrow">LEITURA DOS DADOS</p>
+        <h2>Relatório descritivo</h2>
+      </div>
+    </section>
+    <section id="report" class="panel report">
+      <div class="report-icon">↗</div>
+      <div>
+        <h3>Resumo da competição</h3>
+        <p>
+          Atualize os dados para ver um resumo descritivo baseado
+          nos jogos retornados pela fonte. O painel apresenta
+          estatísticas, não garantias de resultados.
+        </p>
+      </div>
+    </section>
+    <footer>
+      <p>
+        Dados de futebol fornecidos por
+        <a href="https://www.football-data.org/"
+           target="_blank" rel="noreferrer">
+          football-data.org
+        </a>.
+        A cobertura varia por competição e plano.
+      </p>
+      <p>
+        Projeto educativo de estatísticas esportivas.
+        Dados ausentes ou atrasados podem ocorrer.
+      </p>
+    </footer>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>
